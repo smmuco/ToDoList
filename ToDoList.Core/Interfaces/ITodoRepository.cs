@@ -4,10 +4,10 @@ namespace ToDoList.Core.Interfaces
 {
     public interface ITodoRepository
     {
-        List<ToDoItem>GetAllTodos();
-        ToDoItem GetById(int id);
-        void Add(ToDoItem item);
-        void Update(ToDoItem item);
-        void Delete(int id);
+        public Task<List<ToDoItem>> GetAllTodosAsync();
+        public Task<ToDoItem> GetById(int id);
+        Task AddAsync(ToDoItem item);
+        public Task UpdateAsync(ToDoItem item);
+        Task DeleteAsync(int id);
     }
 }
