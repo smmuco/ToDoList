@@ -1,4 +1,4 @@
-﻿using System.Data.Entity;
+﻿//using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Core.Entities;
 using ToDoList.Core.Interfaces;
@@ -11,7 +11,7 @@ namespace ToDoList.Core.Repositories
         private readonly DatabaseContext _context;
         public TodoRepository(DatabaseContext context)  
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
         public async Task AddAsync(ToDoItem item)
         {
@@ -39,10 +39,10 @@ namespace ToDoList.Core.Repositories
 
         public async Task<List<ToDoItem>> GetAllTodosAsync()
         {
-            return await _context.ToDos.ToListAsync();
+            return await _context.ToDos.AsNoTracking().ToListAsync();
         }
 
-        public async Task<ToDoItem> GetById(int id)
+        public async Task<ToDoItem> GetByIdAsync(int id)
         {
             if (id <= 0)
             {

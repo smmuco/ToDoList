@@ -12,12 +12,14 @@ namespace ToDoList.WebUI.Controllers
         {
             _todoRepository = todoRepository;
         }
-        // Add GET action
+
+        // Create GET action
         public IActionResult Create()
         {
             return View();
         }
-        // Add POST action
+
+        // Create POST action
         [HttpPost]
         public async Task<IActionResult> CreateAsync(ToDoItem todo)
         {
@@ -28,16 +30,18 @@ namespace ToDoList.WebUI.Controllers
             }
             return View(todo);
         }
+
         // Delete GET action  
         public IActionResult Delete(int id)
         {
-            var todo = _todoRepository.GetById(id);
+            var todo = _todoRepository.GetByIdAsync(id);
             if (todo == null)
             {
                 return NotFound();
             }
             return View(todo);
         }
+
         // Delete POST action
         [HttpPost]
         public async Task<IActionResult> DeleteAsync(int id)
@@ -45,17 +49,19 @@ namespace ToDoList.WebUI.Controllers
             await _todoRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
-        // Edit GET action
+
+        // Update GET action
         public IActionResult Update(int id)
         {
-            var todo = _todoRepository.GetById(id);
+            var todo = _todoRepository.GetByIdAsync(id);
             if (todo == null)
             {
                 return NotFound();
             }
             return View(todo);
         }
-        // Edit POST action
+
+        // Update POST action
         [HttpPost]
         public async Task<IActionResult> UpdateAsync(ToDoItem todo)
         {
@@ -67,9 +73,9 @@ namespace ToDoList.WebUI.Controllers
             return View(todo);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var todos = _todoRepository.GetAllTodosAsync();
+            var todos = await _todoRepository.GetAllTodosAsync();
             return View(todos);
         }
     }

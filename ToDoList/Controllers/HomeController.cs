@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using ToDoList.Core.Entities;
+using ToDoList.Core.Interfaces;
 using ToDoList.Models;
 
 namespace ToDoList.Controllers
@@ -7,15 +9,22 @@ namespace ToDoList.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ITodoRepository _todoRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ITodoRepository todoRepository)
         {
             _logger = logger;
+            _todoRepository = todoRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var todos = await _todoRepository.GetAllTodosAsync();
+            if (todos == null)
+            {
+                todos = new List<ToDoItem>();
+            }
+            return View(todos);
         }
 
         public IActionResult Privacy()
